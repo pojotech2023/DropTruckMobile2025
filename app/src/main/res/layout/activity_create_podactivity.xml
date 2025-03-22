@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <RelativeLayout
+        android:id="@+id/title_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <RelativeLayout
+            android:id="@+id/img_lay"
+            android:layout_width="75dp"
+            android:layout_height="35dp"
+            android:background="@drawable/back_img_background">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:src="@drawable/keyboard_backspace"
+                android:layout_centerInParent="true"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_pod"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            style="@style/InterRegularStyle"
+            android:layout_toEndOf="@+id/img_lay"
+            android:layout_marginStart="25dp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/pod"
+        android:textColor="@color/black"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:layout_marginTop="4dp">
+
+        <Spinner
+            android:id="@+id/podSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_36sdp"
+            android:spinnerMode="dropdown"
+            android:entries="@array/pod"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/main_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/til_receipt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/CourierReceiptNo"
+        android:layout_marginTop="10dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_confirm_acc_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/pod_soft"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/PodSoftCopy"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:id="@+id/img_pod_soft_copy"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/identity_placeholder"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/pod_courier"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/PodCourier"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:id="@+id/img_pod_courier"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/identity_placeholder"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/pod_receipt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/PodReceipt"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:id="@+id/img_pod_receipt"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/identity_placeholder"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:textSize="13sp"
+            style="@style/Widget.Material3.Button" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_submit_without_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit_without_data"
+            android:textSize="13sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            style="@style/Widget.Material3.Button" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

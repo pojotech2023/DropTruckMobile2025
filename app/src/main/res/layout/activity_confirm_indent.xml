@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <RelativeLayout
+            android:id="@+id/title_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+
+            <RelativeLayout
+                android:id="@+id/img_lay"
+                android:layout_width="75dp"
+                android:layout_height="35dp"
+                android:background="@drawable/back_img_background">
+
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="35dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/keyboard_backspace"
+                    android:layout_centerInParent="true"
+                    app:tint="@color/white" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view_intent"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                style="@style/InterRegularStyle"
+                android:layout_toEndOf="@+id/img_lay"
+                android:layout_marginStart="25dp"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_above="@+id/btn_lay"
+            android:layout_below="@+id/title_lay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="12dp">
+
+                <!--<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:text="@string/customer_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    android:text="@={obj.indent.customerName}"/>-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/pickup_locations"/>
+
+                <TextView
+                    android:id="@+id/txt_ploc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/drop_locations"/>
+
+                <TextView
+                    android:id="@+id/txt_dloc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/truck_type"/>
+
+                <TextView
+                    android:id="@+id/txt_tt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/body_type"/>
+
+                <TextView
+                    android:id="@+id/txt_bt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/weight"/>
+
+                <TextView
+                    android:id="@+id/txt_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    android:text='@{obj.indent.weight+" "+obj.indent.weightUnit}'/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/material_type"/>
+
+                <TextView
+                    android:id="@+id/txt_mt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/sales_person"/>
+
+                <TextView
+                    android:id="@+id/txt_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_marginTop="2dp"
+                    />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/driver_rate_lay">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_marginTop="8dp"
+                        android:textStyle="bold"
+                        android:text="Driver Rate"/>
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="5dp"
+                        android:id="@+id/driver_rate_spinner"
+                        android:layout_below="@+id/title"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/delete_rate"/>
+
+                    <RelativeLayout
+                        android:layout_below="@+id/title"
+                        android:id="@+id/delete_rate"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:background="@color/dark_red"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_centerVertical="true">
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/baseline_delete_24"
+                            android:layout_centerInParent="true"
+                            app:tint="@color/white" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/cRateLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="@string/customer_rate"/>
+
+                    <TextView
+                        android:id="@+id/txt_customer_rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="5dp"
+                        android:layout_marginTop="2dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:id="@+id/btn_lay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true">
+
+            <Button
+                android:id="@+id/win_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/win"
+                android:background="@drawable/green_btn_bg"
+                android:backgroundTint="@color/green"
+                android:drawableTint="@color/green"
+                android:textColor="@color/white"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textSize="13sp"/>
+
+            <Button
+                android:id="@+id/btn_cancel_indent"
+                android:layout_toEndOf="@+id/win_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_indent"
+                android:background="@drawable/red_btn_bg"
+                android:backgroundTint="@color/red"
+                android:drawableTint="@color/red"
+                android:textColor="@color/white"
+                android:layout_marginStart="4dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textSize="13sp"/>
+
+            <Button
+                android:textSize="13sp"
+                android:id="@+id/btn_customer_rate"
+                android:layout_toEndOf="@+id/btn_cancel_indent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/customer_rate"
+                android:background="@drawable/red_btn_bg"
+                android:backgroundTint="@color/blue"
+                android:drawableTint="@color/blue"
+                android:textColor="@color/white"
+                android:layout_marginStart="4dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>

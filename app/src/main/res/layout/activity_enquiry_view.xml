@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="obj"
+            type="com.pojo.droptruck.activity.viewenquiry.ViewEnquiryViewModel" />
+    </data>
+
+<LinearLayout
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.viewenquiry.EnquiryViewActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp">
+
+        <RelativeLayout
+            android:id="@+id/img_lay"
+            android:layout_width="75dp"
+            android:layout_height="35dp"
+            android:background="@drawable/back_img_background">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:src="@drawable/keyboard_backspace"
+                android:layout_centerInParent="true"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_intent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            style="@style/InterRegularStyle"
+            android:layout_toEndOf="@+id/img_lay"
+            android:layout_marginStart="25dp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="12dp">
+
+            <LinearLayout
+                android:id="@+id/not_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="@string/enq_num" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="5dp"
+                        android:id="@+id/txt_enq"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:text="@string/customer_name"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="5dp"
+                        android:layout_weight="2"
+                        android:maxLines="1"
+                        android:text="@={obj.indent.customerName}"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:text="@string/company_name"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_weight="2"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:text="@={obj.indent.companyName}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:text="@string/number_one"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:layout_weight="2"
+                    android:text="@={obj.indent.number1}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:text="@string/number_two"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_weight="2"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:text="@={obj.indent.number2}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:text="@string/source_of_lead"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_weight="2"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    android:text="@={obj.indent.sourceOfLead}"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/pickup_locations"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:text="@={obj.indent.pickupLocationId}"
+                android:textIsSelectable="true"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="@string/drop_locations"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:text="@={obj.indent.dropLocationId}"
+                android:textIsSelectable="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/truck_type"/>
+
+            <TextView
+                android:id="@+id/val_truck"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/body_type"/>
+
+            <TextView
+                android:id="@+id/val_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/weight"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:text='@{obj.indent.weight+" "+obj.indent.weightUnit}'/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/material_type"/>
+
+            <TextView
+                android:id="@+id/val_mat_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/hard_soft"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:text="@{obj.indent.podSoftHardCopy}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/remarks"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:text="@{obj.indent.remarks}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:id="@+id/title_customer_rate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:text="@string/customer_rate"/>
+
+            <TextView
+                android:id="@+id/txt_rate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_weight="2"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <TextView
+                android:id="@+id/title_driver_rate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@string/driver_rate"/>
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edittext_background"
+                android:padding="5dp"
+                android:layout_weight="2"
+                android:id="@+id/driver_rate_spinner" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/follow_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+            <!--android:visibility="gone"-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:id="@+id/followup_lay">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:text="@string/date"/>
+
+                <TextView
+                    android:id="@+id/follow_up_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_weight="2"
+                    android:background="@drawable/edittext_background"
+                    android:padding="5dp"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
+</layout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.pojo.droptruck.dashboard.DashboardFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_dashboard" >
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.pojo.droptruck.fragment.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" >
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/tripFragment"
+        android:name="com.pojo.droptruck.fragment.trips.LiveTripsFragment"
+        android:label="Trips"
+        tools:layout="@layout/fragment_live_trips"/>
+
+    <fragment
+        android:id="@+id/enquiryTripFragment"
+        android:name="com.pojo.droptruck.enquiry.EnquiryFragment"
+        android:label="@string/enquiry"
+        tools:layout="@layout/fragment_enquiry"/>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.pojo.droptruck.fragment.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/customerCreateIndentFragment"
+        android:name="com.pojo.droptruck.user.frag.mapindent.MapCreateIndentFragment"
+        android:label="@string/create_intent"
+        tools:layout="@layout/fragment_map_create_indent" />
+
+</navigation>

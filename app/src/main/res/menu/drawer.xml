@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/drawerProfile"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/profile"
+        app:itemBackground="@drawable/button_background"
+        />
+
+    <item
+        android:id="@+id/drawerMedicalRecord"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/medicalRecord"
+
+        />
+    <item
+        android:id="@+id/drawerBillingDetails"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/billingDetail"
+
+        />
+    <item
+        android:id="@+id/drawerPaymentHistory"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/paymentHistory"
+
+        />
+    <item
+        android:id="@+id/drawerSettings"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/settings"
+
+        />
+    <item
+        android:id="@+id/drawerHelpAndSupport"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/helpSupport"
+
+        />
+
+    <item
+        android:id="@+id/drawerAbout"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/aboutLegar"
+
+        />
+
+</menu>

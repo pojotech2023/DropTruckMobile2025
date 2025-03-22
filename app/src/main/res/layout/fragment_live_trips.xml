@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/light_grey">
+
+    <LinearLayout
+        android:id="@+id/trips_tab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp">
+
+        <com.google.android.material.tabs.TabLayout
+            android:background="@drawable/tab_background"
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:tabGravity="fill"
+            app:tabMode="scrollable"
+            android:layout_margin="2dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabIndicator="@android:color/transparent"
+            app:tabBackground="@drawable/tab_background"
+            app:tabIndicatorColor="@null"
+            app:tabRippleColor="@null"/>
+
+    </RelativeLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:id="@+id/customer_lay">
+
+        <TextView
+            android:id="@+id/no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:text="No Orders"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btn_create_indent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_intent"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/no_data"/>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedSV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/trips_customer_recyclerview"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        tools:listitem="5"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"/>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

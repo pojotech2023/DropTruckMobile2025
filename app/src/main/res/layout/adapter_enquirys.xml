@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/loc_lay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true">
+
+            <ImageView
+                android:id="@+id/pic_loc_img"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_location"
+                android:padding="6dp"
+                android:background="@drawable/black_circle"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_alignParentStart="true"/>
+
+            <ImageView
+                android:id="@+id/dot_img"
+                android:layout_width="2dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/pic_loc_img"
+                android:src="@drawable/vertical_line"/>
+
+            <ImageView
+                android:id="@+id/drop_loc_img"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_location"
+                android:padding="6dp"
+                android:layout_below="@+id/dot_img"
+                android:background="@drawable/black_circle"
+                android:backgroundTint="@color/colorSecondary"
+                android:layout_alignParentStart="true"/>
+
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:id="@+id/details_lay"
+            android:layout_toEndOf="@+id/loc_lay"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="6dp"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp">
+
+                <TextView
+                    android:id="@+id/truck_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/truck_type"
+                    tools:text="@string/truck_type"
+                    android:textSize="13sp"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/div"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:src="@drawable/horizontal_line"
+                    android:layout_below="@+id/truck_type"
+                    android:layout_marginTop="4dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/truck_dtl_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/div"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/body_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/body_type"
+                        tools:text="@string/body_type"
+                        android:textSize="12sp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/weight"
+                        tools:text="@string/weight"
+                        android:textSize="12sp"
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/material_dtl_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/truck_dtl_lay"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/mat_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/material_type"
+                        tools:text="@string/material_type"
+                        android:textSize="12sp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/source_of_lead"
+                        tools:text="@string/source_of_lead"
+                        android:textSize="12sp"
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/txt_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Sales person"
+                    tools:text="Sales person"
+                    android:drawableStart="@drawable/person_24"
+                    android:textSize="12sp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="4dp"
+                    android:layout_below="@id/material_dtl_lay"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/purple_200"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"/>
+
+</LinearLayout>

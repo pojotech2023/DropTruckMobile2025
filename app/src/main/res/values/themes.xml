@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.NksTraders" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.NksTraders.Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+    </style>
+
+
+    <style name="PoppinsMediumStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="PoppinsRegularStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="PoppinsSemiBoldStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Theme.NavigationDrawerActivity.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.NavigationDrawerActivity.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SansRegularStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/public_sans</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="InterRegularStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.NksTraders" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+</resources>

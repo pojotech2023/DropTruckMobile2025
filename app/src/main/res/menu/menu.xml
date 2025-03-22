@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboardFragment"
+        android:icon="@drawable/bottom_home"
+        android:title="@string/home"/>
+
+    <item
+        android:id="@+id/enquiryTripFragment"
+        android:icon="@drawable/enqiry_trip"
+        android:title="@string/enquiry"/>
+
+    <item
+        android:id="@+id/tripFragment"
+        android:icon="@drawable/bottom_trip"
+        android:title="@string/trips"/>
+
+    <item
+        android:id="@+id/placeholder"
+        android:title="" />
+
+    <item
+        android:id="@+id/historyFragment"
+        android:icon="@drawable/bottom_histry"
+        android:title="@string/history"/>
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/bottom_profile"
+        android:title="@string/profile"/>
+
+</menu>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "811763483763",
+    "project_id": "droptruck-78dc8",
+    "storage_bucket": "droptruck-78dc8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811763483763:android:fd0462e7e50302dc381606",
+        "android_client_info": {
+          "package_name": "com.pojo.droptruck"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiefskx6luumkquzyNqWtD4cuBA5wlhaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811763483763:android:324ed9b0d401b4c0381606",
+        "android_client_info": {
+          "package_name": "com.pojo.nkstraders"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiefskx6luumkquzyNqWtD4cuBA5wlhaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
