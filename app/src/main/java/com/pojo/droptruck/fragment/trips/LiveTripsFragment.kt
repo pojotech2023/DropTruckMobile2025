@@ -1,6 +1,8 @@
 package com.pojo.droptruck.fragment.trips
 
+import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import com.pojo.droptruck.tabsadapter.TripsViewPagerAdapter
 import com.pojo.droptruck.trips.TripsViewModel
 import com.pojo.droptruck.user.act.CustomerMainActivity
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callCustomerViewTripsDetails
 import com.pojo.droptruck.utils.callViewTripsDetails
@@ -42,6 +45,8 @@ class LiveTripsFragment : BaseFragment(), TripsAdapter.TripsInterface {
     //becz of pagination...
     var currentPage:Int = 1
     var totalPage:Int = 1
+
+    var progressDialog: ProgressDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +78,7 @@ class LiveTripsFragment : BaseFragment(), TripsAdapter.TripsInterface {
             val tabLayout = mBinding.tabLayout
 
             viewPager.isUserInputEnabled = false
-            viewPager.offscreenPageLimit = 1
+            //viewPager.offscreenPageLimit = 1
 
             val adapter = TripsViewPagerAdapter(childFragmentManager, lifecycle)
             viewPager.adapter = adapter
@@ -90,7 +95,7 @@ class LiveTripsFragment : BaseFragment(), TripsAdapter.TripsInterface {
             mViewModel.wfdListLiveData.observe(viewLifecycleOwner, Observer {
 
                 if (it!=null){
-                    dismissProgressDialog()
+                    //AppUtils.dismissProgressDialog(progressDialog)
                     when(it.status){
                         Status.SUCCESS -> {
 
@@ -143,6 +148,7 @@ class LiveTripsFragment : BaseFragment(), TripsAdapter.TripsInterface {
                 }
             })
 
+        Log.d("FRAGMENT____TRIPS", "onCreateView: ")
 
         return mBinding.root
     }
@@ -197,6 +203,21 @@ class LiveTripsFragment : BaseFragment(), TripsAdapter.TripsInterface {
             e.printStackTrace()
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("FRAGMENT____TRIPS", "onPause: ")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("FRAGMENT____TRIPS", "onStop: ")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("FRAGMENT____TRIPS", "onDestroy: ")
     }
 
 }

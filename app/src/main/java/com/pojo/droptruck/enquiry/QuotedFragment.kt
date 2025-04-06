@@ -1,6 +1,7 @@
 package com.pojo.droptruck.enquiry
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.pojo.droptruck.pojo.ApplyRate
 import com.pojo.droptruck.pojo.Indents
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callConfirmIndents
 import com.pojo.droptruck.utils.callViewEnquiry
@@ -41,6 +43,8 @@ class QuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface{
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,7 +56,7 @@ class QuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface{
 
         mViewModel.resultLiveData.observe(viewLifecycleOwner, Observer {
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -83,7 +87,7 @@ class QuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface{
         })
 
         mViewModel.applyRateResLiveData.observe(viewLifecycleOwner,Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -157,7 +161,7 @@ class QuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface{
             e.printStackTrace()
         }
 
-        initFn()
+        //initFn()
 
         return mainBinding.root
     }
@@ -277,7 +281,7 @@ class QuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface{
             }else if (edtRemarks.text.toString().trim().isEmpty()) {
                 edtRemarks.error = "Please enter remarks"
             }*/else {
-                showProgressDialog()
+                progressDialog = AppUtils.showProgressDialog(requireActivity())
 
                 val applyRate = ApplyRate()
                 applyRate.rate = rate
@@ -296,11 +300,13 @@ class QuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface{
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-        //initFn()
+        currentPage = 1
+        clearData()
+        initFn()
     }
 
     private fun initFn() {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)
         role = prefs.getValueString(AppConstant.ROLE_ID)
 

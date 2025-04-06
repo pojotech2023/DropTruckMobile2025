@@ -1,6 +1,7 @@
 package com.pojo.droptruck.trips
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ import com.pojo.droptruck.datastore.base.BaseFragment
 import com.pojo.droptruck.pojo.Indents
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callViewTripsDetails
 import com.pojo.droptruck.utils.shortToast
@@ -36,6 +38,8 @@ class OntheRoadFragment : BaseFragment(), TripsAdapter.TripsInterface {
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -45,7 +49,7 @@ class OntheRoadFragment : BaseFragment(), TripsAdapter.TripsInterface {
         mViewModel.onRoadTripLiveData.observe(viewLifecycleOwner, Observer {
 
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -90,7 +94,7 @@ class OntheRoadFragment : BaseFragment(), TripsAdapter.TripsInterface {
                 }
             })
 
-        initFn() //becz of pagination...
+        //initFn() //becz of pagination...
 
         return mainBinding.root
     }
@@ -99,11 +103,13 @@ class OntheRoadFragment : BaseFragment(), TripsAdapter.TripsInterface {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-        //initFn()
+        currentPage = 1
+        clearData()
+        initFn()
     }
 
     private fun initFn() {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)
         val role = prefs.getValueString(AppConstant.ROLE_ID)
 

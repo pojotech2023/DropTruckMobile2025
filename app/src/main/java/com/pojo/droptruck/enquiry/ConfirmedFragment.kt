@@ -2,6 +2,7 @@ package com.pojo.droptruck.enquiry
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import com.pojo.droptruck.datastore.base.BaseFragment
 import com.pojo.droptruck.pojo.Indents
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callViewEnquiry
 import com.pojo.droptruck.utils.shortToast
@@ -49,6 +51,8 @@ class ConfirmedFragment : BaseFragment(), EnquiryAdapter.EnquiryInterface {
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +63,7 @@ class ConfirmedFragment : BaseFragment(), EnquiryAdapter.EnquiryInterface {
         mViewModel.confirmedListLiveData.observe(viewLifecycleOwner, Observer {
 
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -90,7 +94,7 @@ class ConfirmedFragment : BaseFragment(), EnquiryAdapter.EnquiryInterface {
         })
 
         viewModel.cancelTripLiveData.observe(viewLifecycleOwner, Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -136,7 +140,7 @@ class ConfirmedFragment : BaseFragment(), EnquiryAdapter.EnquiryInterface {
             e.printStackTrace()
         }
 
-        initFn() //becz of pagination...
+        //initFn() //becz of pagination...
 
         return mainBinding.root
     }
@@ -144,11 +148,14 @@ class ConfirmedFragment : BaseFragment(), EnquiryAdapter.EnquiryInterface {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-        //initFn()
+        currentPage = 1
+        clearData()
+        initFn()
     }
 
     private fun initFn() {
-        showProgressDialog()
+        //progressDialog = AppUtils.showProgressDialog(requireActivity())
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)!!
         role = prefs.getValueString(AppConstant.ROLE_ID)!!
 
@@ -343,7 +350,7 @@ class ConfirmedFragment : BaseFragment(), EnquiryAdapter.EnquiryInterface {
 
     private fun callCancelApi(cancelReason: String, reason: String, date: String,indentId:String,
         fReason:String) {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         viewModel.callCancelTrip(indentId,userId,cancelReason,reason,date,role,fReason)
     }
 

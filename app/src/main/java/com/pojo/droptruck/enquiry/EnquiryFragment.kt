@@ -37,7 +37,7 @@ class EnquiryFragment : Fragment() {
         val tabLayout = mBinding.tabLayout
 
         viewPager.isUserInputEnabled = false
-        viewPager.offscreenPageLimit = 1
+        //viewPager.offscreenPageLimit = 1
 
         val adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
         viewPager.adapter = adapter

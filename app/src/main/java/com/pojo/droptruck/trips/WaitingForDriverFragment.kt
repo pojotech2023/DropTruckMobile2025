@@ -2,6 +2,7 @@ package com.pojo.droptruck.trips
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,6 +26,7 @@ import com.pojo.droptruck.datastore.base.BaseFragment
 import com.pojo.droptruck.pojo.Indents
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callCreateDriver
 import com.pojo.droptruck.utils.callViewEnquiry
@@ -52,6 +54,8 @@ class WaitingForDriverFragment : BaseFragment(), TripsAdapter.TripsInterface {
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -61,7 +65,7 @@ class WaitingForDriverFragment : BaseFragment(), TripsAdapter.TripsInterface {
         mViewModel.wfdListLiveData.observe(viewLifecycleOwner, Observer {
 
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -92,7 +96,7 @@ class WaitingForDriverFragment : BaseFragment(), TripsAdapter.TripsInterface {
         })
 
         viewModel.cancelTripLiveData.observe(viewLifecycleOwner, Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -134,7 +138,7 @@ class WaitingForDriverFragment : BaseFragment(), TripsAdapter.TripsInterface {
                 }
             })
 
-        initFn() //becz of pagination...
+        //initFn() //becz of pagination...
 
         return mainBinding.root
     }
@@ -143,11 +147,13 @@ class WaitingForDriverFragment : BaseFragment(), TripsAdapter.TripsInterface {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-        //initFn()
+        currentPage = 1
+        clearData()
+        initFn()
     }
 
     private fun initFn() {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)!!
         role = prefs.getValueString(AppConstant.ROLE_ID)!!
 
@@ -327,7 +333,7 @@ class WaitingForDriverFragment : BaseFragment(), TripsAdapter.TripsInterface {
 
     private fun callCancelApi(cancelReason: String, reason: String, date: String,indentId:String,
                               fReason:String) {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         viewModel.callCancelTrip(indentId,userId,cancelReason,reason,date,role,fReason)
     }
 

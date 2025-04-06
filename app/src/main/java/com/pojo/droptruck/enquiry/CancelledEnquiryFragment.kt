@@ -1,6 +1,7 @@
 package com.pojo.droptruck.enquiry
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.pojo.droptruck.datastore.base.BaseFragment
 import com.pojo.droptruck.pojo.Indents
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callIndentEdit
 import com.pojo.droptruck.utils.callViewEnquiry
@@ -36,6 +38,8 @@ class CancelledEnquiryFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface 
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,7 +50,7 @@ class CancelledEnquiryFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface 
         mViewModel.cancelIndentListLiveData.observe(viewLifecycleOwner, Observer {
 
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -74,7 +78,7 @@ class CancelledEnquiryFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface 
         })
 
         mViewModel.restoreLiveData.observe(viewLifecycleOwner,Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -114,19 +118,21 @@ class CancelledEnquiryFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface 
             e.printStackTrace()
         }
 
-        initFn() //becz of pagination...
+        //initFn() //becz of pagination...
 
         return mainBinding.root
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: ")
-        //initFn() //becz of pagination...
+        Log.d(TAG, "onResume: "+"Tot: "+totalPage + "current : "+currentPage)
+        currentPage = 1
+        clearData()
+        initFn() //becz of pagination...
     }
 
     private fun initFn() {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)
         val role = prefs.getValueString(AppConstant.ROLE_ID)
 

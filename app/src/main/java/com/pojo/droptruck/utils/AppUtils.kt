@@ -1,9 +1,11 @@
 package com.pojo.droptruck.utils
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
+import android.os.Handler
 import android.util.Base64
 import android.widget.Toast
 import com.google.android.gms.maps.model.LatLng
@@ -26,16 +28,17 @@ object AppUtils {
 
 
     const val PREFERENCE_NAME="NSKTRADERS"
-    /*const val BASE_URL= "http://indiatruck.in/api/api/";
-    const val IMAGE_BASE_URL= "http://indiatruck.in/";*/
+    //UAT...
+    const val BASE_URL= "https://indiatruck.in/api/api/";
+    const val IMAGE_BASE_URL= "https://indiatruck.in/";
 
     //Production...
     /*const val BASE_URL= "https://droptruck.in/api/api/"
     const val IMAGE_BASE_URL= "https://droptruck.in/"*/
 
     //Development...
-    const val BASE_URL= "http://hiretruck.in/api/api/";
-    const val IMAGE_BASE_URL= "http://hiretruck.in/";
+    /*const val BASE_URL= "https://hiretruck.in/api/api/";
+    const val IMAGE_BASE_URL= "https://hiretruck.in/";*/
 
     const val SalesType = "3"
     const val SupplierType = "4"
@@ -339,6 +342,26 @@ object AppUtils {
         }else{
             return ""
         }
+    }
+
+
+    fun showProgressDialog(activity:Context):ProgressDialog {
+        //Handler().postDelayed(Runnable {
+            val mProgressDialog = ProgressDialog(activity)
+            mProgressDialog.setMessage("Loading...")
+            mProgressDialog.setCanceledOnTouchOutside(false)
+            mProgressDialog.show()
+        //},500)
+
+        //callDelay()
+
+        return mProgressDialog
+    }
+    fun dismissProgressDialog(mProgressDialog: ProgressDialog?) {
+        Handler().postDelayed(Runnable {
+            mProgressDialog?.dismiss()
+        },500)
+
     }
 
 

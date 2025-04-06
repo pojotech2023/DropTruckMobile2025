@@ -1,6 +1,7 @@
 package com.pojo.droptruck.enquiry
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ import com.pojo.droptruck.pojo.ApplyRate
 import com.pojo.droptruck.pojo.Indents
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
+import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.callIndentEdit
 import com.pojo.droptruck.utils.callViewEnquiry
@@ -43,6 +45,8 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
@@ -53,7 +57,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
         mViewModel.resultLiveData.observe(viewLifecycleOwner, Observer {
 
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -84,7 +88,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
         })
 
         mViewModel.applyRateResLiveData.observe(viewLifecycleOwner,Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -117,7 +121,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
         })
 
         mViewModel.deleteLiveData.observe(viewLifecycleOwner,Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -141,7 +145,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
         })
 
         mViewModel.cloneIndentLiveData.observe(viewLifecycleOwner,Observer {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             try {
                 if (it!=null){
                     when(it.status){
@@ -188,12 +192,12 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
             e.printStackTrace()
         }
 
-        initFn()
+        //initFn()
         return mBinding.root
     }
 
     private fun initFn() {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)
         val role = prefs.getValueString(AppConstant.ROLE_ID)
 
@@ -254,7 +258,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
         alertDialogBuilder.setTitle("Delete")
         alertDialogBuilder.setMessage("Are you sure you want to delete?")
         alertDialogBuilder.setPositiveButton("Yes") { dialogInterface: DialogInterface, _: Int ->
-            showProgressDialog()
+            progressDialog = AppUtils.showProgressDialog(requireActivity())
             dialogInterface.cancel()
             val data = enquiryList[pos]
             mViewModel.deleteIndent(data.id)
@@ -295,7 +299,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
             }else if (edtRemarks.text.toString().trim().isEmpty()) {
                 edtRemarks.error = "Please enter remarks"
             }*/else {
-                showProgressDialog()
+                progressDialog = AppUtils.showProgressDialog(requireActivity())
 
                 val applyRate = ApplyRate()
                 applyRate.rate = rate
@@ -319,7 +323,9 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-        //initFn()
+        currentPage = 1
+        clearData()
+        initFn()
     }
 
     private fun showCloneConfirmationDialog(id: String) {
@@ -329,7 +335,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
         alertDialogBuilder.setMessage("Are you sure you want to clone this indent?")
         alertDialogBuilder.setPositiveButton("Yes") { dialogInterface: DialogInterface, _: Int ->
             dialogInterface.cancel()
-            showProgressDialog()
+            progressDialog = AppUtils.showProgressDialog(requireActivity())
             mViewModel.callCloneIndent(id)
         }
         alertDialogBuilder.setNegativeButton("No") { dialogInterface: DialogInterface, i: Int ->
@@ -349,6 +355,10 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy: ")
+        /*mViewModel.resultLiveData.value = null
+        mViewModel.applyRateResLiveData.value = null
+        mViewModel.deleteLiveData.value = null
+        mViewModel.cloneIndentLiveData.value = null*/
     }
 
     override fun onDestroyView() {

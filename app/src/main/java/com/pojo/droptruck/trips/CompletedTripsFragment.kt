@@ -105,7 +105,7 @@ class CompletedTripsFragment : Fragment(),TripsAdapter.TripsInterface {
                 }
             })
 
-        initFn() //becz of pagination...
+        //initFn() //becz of pagination...
 
         return mainBinding.root
     }
@@ -114,7 +114,9 @@ class CompletedTripsFragment : Fragment(),TripsAdapter.TripsInterface {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-        //initFn()
+        currentPage = 1
+        clearData()
+        initFn()
     }
 
     private fun initFn() {

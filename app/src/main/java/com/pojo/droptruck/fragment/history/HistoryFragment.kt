@@ -1,6 +1,7 @@
 package com.pojo.droptruck.fragment.history
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,6 +44,8 @@ class HistoryFragment : BaseFragment(),TripsAdapter.TripsInterface  {//EnquiryAd
     var currentPage:Int = 1
     var totalPage:Int = 1
 
+    var progressDialog: ProgressDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +57,7 @@ class HistoryFragment : BaseFragment(),TripsAdapter.TripsInterface  {//EnquiryAd
         val tabLayout = mBinding.tabLayout
 
         viewPager.isUserInputEnabled = false
-        viewPager.offscreenPageLimit = 1
+        //viewPager.offscreenPageLimit = 1
 
         val tabAdapter = HistoryViewPagerAdapter(childFragmentManager, lifecycle)
         viewPager.adapter = tabAdapter
@@ -68,7 +71,7 @@ class HistoryFragment : BaseFragment(),TripsAdapter.TripsInterface  {//EnquiryAd
         mViewModel.resultLiveData.observe(viewLifecycleOwner, Observer {
 
             if (it!=null){
-                dismissProgressDialog()
+                AppUtils.dismissProgressDialog(progressDialog)
                 when(it.status){
                     Status.SUCCESS -> {
 
@@ -142,7 +145,7 @@ class HistoryFragment : BaseFragment(),TripsAdapter.TripsInterface  {//EnquiryAd
     }
 
     private fun initFn() {
-        showProgressDialog()
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)
         val role = prefs.getValueString(AppConstant.ROLE_ID)
 
@@ -176,10 +179,10 @@ class HistoryFragment : BaseFragment(),TripsAdapter.TripsInterface  {//EnquiryAd
                             if (it.size>0) {
 
                                 if (it[0].podSoftCopy!=null) {
-                                    showProgressDialog()
+                                    progressDialog = AppUtils.showProgressDialog(requireActivity())
                                     showImage(AppUtils.IMAGE_BASE_URL+it[0].podSoftCopy)
                                 }else if (it[0].podCourier!=null) {
-                                    showProgressDialog()
+                                    progressDialog = AppUtils.showProgressDialog(requireActivity())
                                     showImage(AppUtils.IMAGE_BASE_URL+it[0].podCourier)
                                 }
 
@@ -205,19 +208,19 @@ class HistoryFragment : BaseFragment(),TripsAdapter.TripsInterface  {//EnquiryAd
                     override fun onResourceReady(resource: Drawable?, model: Any?,
                                                  target: Target<Drawable>?,
                                                  dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        dismissProgressDialog()
+                        AppUtils.dismissProgressDialog(progressDialog)
                         return false
                     }
 
                     override fun onLoadFailed(e: GlideException?, model: Any?, target:
                     Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        dismissProgressDialog()
+                        AppUtils.dismissProgressDialog(progressDialog)
                         return false
                     }
                 })
                 .into(img)
         }catch (e:Exception) {
-            dismissProgressDialog()
+            AppUtils.dismissProgressDialog(progressDialog)
             e.printStackTrace()
         }
     }

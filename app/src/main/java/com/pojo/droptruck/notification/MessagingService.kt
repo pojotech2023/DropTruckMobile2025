@@ -1,11 +1,17 @@
 package com.pojo.droptruck.notification
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -14,10 +20,7 @@ import com.pojo.droptruck.R
 import com.pojo.droptruck.activity.newmain.NewMainActivity
 import java.io.IOException
 import java.net.URL
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.os.Build
+
 
 class MessagingService : FirebaseMessagingService() {
     var TAG = "MyFirebaseMesaggingService"
@@ -68,13 +71,15 @@ class MessagingService : FirebaseMessagingService() {
         }
         val channelId = getString(R.string.app_name)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val sound =
+                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/notification_sound.mp3")
         val notificationBuilder: NotificationCompat.Builder =
             NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.delivery_tracking)
                 .setContentTitle(title)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+                .setSound(sound)
                 .setContentIntent(pendingIntent)
                 .setStyle(NotificationCompat.BigPictureStyle().bigPicture(bmp ?: BitmapFactory.decodeResource(resources,R.drawable.delivery_tracking)))
                 .setPriority(Notification.PRIORITY_HIGH)
@@ -82,11 +87,18 @@ class MessagingService : FirebaseMessagingService() {
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
+
             val channel = NotificationChannel(
                 channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT
+                "Notification",
+                NotificationManager.IMPORTANCE_HIGH
             )
+            channel.setSound(sound , audioAttributes)
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
