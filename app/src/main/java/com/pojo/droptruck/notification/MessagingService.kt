@@ -30,12 +30,21 @@ class MessagingService : FirebaseMessagingService() {
         try{
             if (message.data.size > 0) {
                 Log.d(TAG, "Message Data payload: " + message.data)
-            }
-            if (message.notification != null) {
+
+                val sound = message.data["sound"]
+
+                if (sound.isNullOrEmpty()) {
+                    Log.d(TAG, "onMessageReceived: empty sound")
+                    sendNotification(message.data["body"], message.data["title"],"notification_sound.mp3")
+                }else {
+                    Log.d(TAG, "onMessageReceived: sound")
+                    sendNotification(message.data["body"], message.data["title"], "$sound.mp3")
+
+                }
+            } else if (message.notification != null) {
+                Log.d(TAG, "onMessageReceived: notify")
                 sendNotification(
-                    message.notification!!.body, message.notification!!.title, message.notification!!
-                        .imageUrl
-                )
+                    message.notification!!.body, message.notification!!.title,"notification_sound.mp3")
             }else {
                 Log.d("Notification:::","Null")
             }
@@ -49,59 +58,62 @@ class MessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
     }
 
-    private fun sendNotification(messageBody: String?, title: String?, imgUrl: Uri?) {
+    private fun sendNotification(messageBody: String?, title: String?,soundFile: String) {
 
         try{
 
-        Log.d("Notification:::","Success")
-        val intent = Intent(this, NewMainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-        )
-        var bmp: Bitmap? = null
-
-        try {
-            Log.d(TAG, "sendNotification: " + imgUrl.toString())
-            val `in` = URL(imgUrl.toString()).openStream()
-            bmp = BitmapFactory.decodeStream(`in`)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        val channelId = getString(R.string.app_name)
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val sound =
-                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/notification_sound.mp3")
-        val notificationBuilder: NotificationCompat.Builder =
-            NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.delivery_tracking)
-                .setContentTitle(title)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(sound)
-                .setContentIntent(pendingIntent)
-                .setStyle(NotificationCompat.BigPictureStyle().bigPicture(bmp ?: BitmapFactory.decodeResource(resources,R.drawable.delivery_tracking)))
-                .setPriority(Notification.PRIORITY_HIGH)
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            val audioAttributes = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build()
-
-            val channel = NotificationChannel(
-                channelId,
-                "Notification",
-                NotificationManager.IMPORTANCE_HIGH
+            Log.d("Notification:::","Success")
+            val intent = Intent(this, NewMainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val pendingIntent = PendingIntent.getActivity(
+                this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
-            channel.setSound(sound , audioAttributes)
-            notificationManager.createNotificationChannel(channel)
-        }
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+            var bmp: Bitmap? = null
+
+            /*try {
+                Log.d(TAG, "sendNotification: " + imgUrl.toString())
+                val `in` = URL(imgUrl.toString()).openStream()
+                bmp = BitmapFactory.decodeStream(`in`)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }*/
+
+            val channelId = "DT_APP" //getString(R.string.app_name)
+            val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val sound =
+                //Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/notification_sound.mp3")
+                //Uri.parse("android.resource://" + packageName + "/" + R.raw.notification_sound)
+                Uri.parse("android.resource://${packageName}/R.raw.${soundFile}")
+            val notificationBuilder: NotificationCompat.Builder =
+                NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.drawable.delivery_tracking)
+                    .setContentTitle(title)
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(sound)
+                    .setContentIntent(pendingIntent)
+                    //.setStyle(NotificationCompat.BigPictureStyle().bigPicture(bmp ?: BitmapFactory.decodeResource(resources,R.drawable.delivery_tracking)))
+                    .setPriority(Notification.PRIORITY_HIGH)
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+            // Since android Oreo notification channel is needed.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                val audioAttributes = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build()
+
+                val channel = NotificationChannel(
+                    channelId,
+                    "Notification",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+                channel.setSound(sound , audioAttributes)
+                notificationManager.createNotificationChannel(channel)
+            }
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
 
         }catch (e:Exception){
             e.printStackTrace()
