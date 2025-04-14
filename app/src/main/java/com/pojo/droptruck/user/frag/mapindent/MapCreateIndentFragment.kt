@@ -14,12 +14,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -41,6 +43,8 @@ import com.pojo.droptruck.activity.confirmindent.ConIndentViewModel
 import com.pojo.droptruck.databinding.FragmentMapCreateIndentBinding
 import com.pojo.droptruck.datastore.base.BaseFragment
 import com.pojo.droptruck.pojo.Indents
+import com.pojo.droptruck.pojo.SpinnerData
+import com.pojo.droptruck.pojo.TypesPojo
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.user.model.MapData
 import com.pojo.droptruck.user.model.UserCreateIndent
@@ -52,6 +56,8 @@ import com.pojo.droptruck.utils.callCustomerViewTripsDetails
 import com.pojo.droptruck.utils.shortToast
 import com.pojo.droptruck.utils.showCustRateDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -227,7 +233,16 @@ class MapCreateIndentFragment : BaseFragment(),OnMapReadyCallback {
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View, position: Int, id: Long) {
                 Log.d("Item: ", "selected item " + parent.selectedItem + " " + position)
-                truckType = position.toString()
+                //truckType = position.toString()
+
+                try{
+                    val selectedObject = mBinding.truckTypeSpinner.selectedItem as SpinnerData
+                    truckType = selectedObject.id.toString() //new...
+                    Log.d("Item: ", "selected item " + truckType)
+                }catch (e:Exception){
+                    truckType = position.toString() //old...
+                    e.printStackTrace()
+                }
 
                 if (position>0 && !parent.selectedItem.toString().equals("Others",true)) {
                     newTruckType = ""
@@ -287,7 +302,16 @@ class MapCreateIndentFragment : BaseFragment(),OnMapReadyCallback {
                 Log.d("Item: ", "selected item " + parent.selectedItem + " " + position)
                 var pos = position +1
 
-                matType = position.toString()
+                //matType = position.toString()
+
+                try{
+                    val selectedObject = mBinding.materialTypeSpinner.selectedItem as SpinnerData
+                    matType = selectedObject.id.toString() //new...
+                    Log.d("Item: ", "selected item " + matType)
+                }catch (e:Exception){
+                    matType = position.toString() //old...
+                    e.printStackTrace()
+                }
 
                 if (position>0 && !parent.selectedItem.toString().equals("Others",true)) {
                     newMatType = ""
@@ -645,6 +669,78 @@ class MapCreateIndentFragment : BaseFragment(),OnMapReadyCallback {
 
         }
 
+        mViewModel.bodyTypeData.observe(viewLifecycleOwner,Observer{
+
+            if (it?.data!=null && it.status == 200) {
+                val bodyTypeList = mutableListOf<String>()
+
+                bodyTypeList.add("Select body type")
+
+                for (body in it.data) {
+                    bodyTypeList.add(body.name.toString())
+                }
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val adapter = ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_item, bodyTypeList)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    mBinding.bodyTypeSpinner.adapter = adapter
+                }
+            }
+
+        })
+
+        mViewModel.truckTypeData.observe(viewLifecycleOwner,Observer {
+            if (it?.data!=null && it.status == 200){
+                val truckTypesList = ArrayList<SpinnerData>()
+
+                try{
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select truck type"
+
+                    truckTypesList.add(selectType)
+                    truckTypesList.addAll(it.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, truckTypesList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.truckTypeSpinner.adapter = adapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
+        })
+
+        mViewModel.materialTypeData.observe(viewLifecycleOwner,Observer{
+            if (it?.data!=null && it.status == 200){
+                val materialTypesList = ArrayList<SpinnerData>()
+
+                try{
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select material type"
+
+                    materialTypesList.add(selectType)
+                    materialTypesList.addAll(it.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, materialTypesList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.materialTypeSpinner.adapter = adapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+
+        })
+
         return mBinding.root
     }
 
@@ -803,6 +899,7 @@ class MapCreateIndentFragment : BaseFragment(),OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mViewModel.getSpinnerData()
 
     }
 
@@ -1140,5 +1237,92 @@ class MapCreateIndentFragment : BaseFragment(),OnMapReadyCallback {
         }
         return null
     }
+
+    fun processData(
+        bodyTypes: TypesPojo?,
+        truckTypes: TypesPojo?,
+        materialTypes: TypesPojo?,
+    ) {
+
+        dismissProgressDialog()
+
+        val bodyTypeList = mutableListOf<String>()
+        val truckTypesList = ArrayList<SpinnerData>()
+        val materialTypesList = ArrayList<SpinnerData>()
+
+        lifecycleScope.launch(Dispatchers.Default) {
+
+            if (bodyTypes?.data != null && bodyTypes.status == 200) {
+
+                //try{
+
+                bodyTypeList.add("Select body type")
+
+                for (body in bodyTypes.data) {
+                    bodyTypeList.add(body.name.toString())
+                }
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val adapter = ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_item, bodyTypeList)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    mBinding.bodyTypeSpinner.adapter = adapter
+                }
+
+                /* }catch (e:Exception){
+                     e.printStackTrace()
+                 }*/
+
+            }
+
+            if (truckTypes?.data!=null && truckTypes.status == 200) {
+
+                try{
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select truck type"
+
+                    truckTypesList.add(selectType)
+                    truckTypesList.addAll(truckTypes.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, truckTypesList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.truckTypeSpinner.adapter = adapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+
+            if (materialTypes?.data!=null && materialTypes.status == 200) {
+
+                try{
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select material type"
+
+                    materialTypesList.add(selectType)
+                    materialTypesList.addAll(materialTypes.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, materialTypesList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.materialTypeSpinner.adapter = adapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+
+        }
+
+    }
+
 
 }

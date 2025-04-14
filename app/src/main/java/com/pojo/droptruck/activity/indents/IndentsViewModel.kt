@@ -120,6 +120,8 @@ class IndentsViewModel @Inject constructor(var repo: ApiRepository): ViewModel()
                     context.processData(bodyTypesLiveData, truckTypesLiveData, materialTypesLiveData)
 
                 } catch (ex: Exception) {
+                    val context = activity as IndentActivity
+                    context.processData(bodyTypesLiveData, truckTypesLiveData, materialTypesLiveData)
                     ex.printStackTrace()
                 }
             }

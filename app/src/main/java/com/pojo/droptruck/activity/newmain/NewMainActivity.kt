@@ -31,7 +31,6 @@ import com.pojo.droptruck.signin.SignInViewModel
 import com.pojo.droptruck.utils.AppConstant
 import com.pojo.droptruck.utils.LoginActivity
 import com.pojo.droptruck.utils.Status
-import com.pojo.droptruck.utils.callCreateIndent
 import com.pojo.droptruck.utils.callCustomerActivity
 import com.pojo.droptruck.utils.callCustomerCreateIndent
 import com.pojo.droptruck.utils.callNewMainActivity

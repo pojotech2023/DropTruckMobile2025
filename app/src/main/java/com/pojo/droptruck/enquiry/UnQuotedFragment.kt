@@ -8,13 +8,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.android.material.textfield.TextInputLayout
 import com.pojo.droptruck.R
+import com.pojo.droptruck.activity.confirmindent.ConIndentViewModel
 import com.pojo.droptruck.adapter.EnquiryAdapter
 import com.pojo.droptruck.databinding.FragmentUnQuotedBinding
 import com.pojo.droptruck.datastore.base.BaseFragment
@@ -46,7 +52,8 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
     var totalPage:Int = 1
 
     var progressDialog: ProgressDialog? = null
-
+    val viewModel: ConIndentViewModel by viewModels()
+    var role:String = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
@@ -192,6 +199,34 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
             e.printStackTrace()
         }
 
+        viewModel.cancelTripLiveData.observe(viewLifecycleOwner, Observer {
+            AppUtils.dismissProgressDialog(progressDialog)
+            try {
+                if (it!=null){
+                    when(it.status){
+                        Status.SUCCESS -> {
+                            if (it.data!=null) {
+                                shortToast(it.data.message!!)
+                                closeDialog()
+                                if (it.data.response!=null &&
+                                    it.data.response == 200) {
+                                    currentPage = 1
+                                    initFn()
+                                }
+                            }else{
+                                //shortToast("No Response")
+                            }
+                        }
+                        Status.ERROR -> {
+                            shortToast(it.message!!)
+                        }
+                    }
+                }
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+        })
+
         //initFn()
         return mBinding.root
     }
@@ -199,7 +234,7 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
     private fun initFn() {
         progressDialog = AppUtils.showProgressDialog(requireActivity())
         userId = prefs.getValueString(AppConstant.USER_ID)
-        val role = prefs.getValueString(AppConstant.ROLE_ID)
+        role = prefs.getValueString(AppConstant.ROLE_ID)!!
 
         when(role) {
             AppConstant.SALES -> {
@@ -239,7 +274,8 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
                     showRateDialog(pos,id)
                 }
                 AppConstant.DELETE_ENQUIRY -> {
-                    showConfirmationDialog(pos,id)
+                    //showConfirmationDialog(pos,id) //old...
+                    callCancelDailog(id) //new... for getting reason for delete Enquiry.
                 }
                 AppConstant.CLONE_INDENT -> {
                     showCloneConfirmationDialog(id.toString());
@@ -369,6 +405,151 @@ class UnQuotedFragment : BaseFragment(),EnquiryAdapter.EnquiryInterface {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause: ")
+    }
+
+    private fun callCancelDailog(id: Int) {
+
+        try {
+
+            dialog = showCurrencyDialog(R.layout.dialog_cancel_enquiry)
+            val btnSubmit: Button = dialog.findViewById(R.id.btn_save)
+            val spinner: Spinner = dialog.findViewById(R.id.cancelReasonSpinner)
+            val tilCancelLay: TextInputLayout = dialog.findViewById(R.id.til_cancel_reason)
+            val tilFollowupLay: TextInputLayout = dialog.findViewById(R.id.til_followup_reason)
+            val tilDateLay: TextInputLayout = dialog.findViewById(R.id.til_date)
+            var edtDate: EditText = dialog.findViewById(R.id.et_date)
+            val edtReason: EditText = dialog.findViewById(R.id.et_cancel_reason)
+            val edtFollowup: EditText = dialog.findViewById(R.id.et_followup)
+            val imgClose: ImageView = dialog.findViewById(R.id.img_close)
+
+            var cancelReason = ""
+
+            try{
+                // Load from XML resource
+                val reasons = resources.getStringArray(R.array.cancelReason).toMutableList()
+
+                // Remove a specific reason (by value or index)
+                reasons.remove("Followup") // or reasons.removeAt(2)
+
+                // Set the new adapter
+                val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, reasons)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+
+            spinner.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View, position: Int, id: Long
+                ) {
+                    Log.d("Item: ", "selected item " + parent.selectedItem + " " + position)
+
+                    if (position > 0) {
+
+                        cancelReason = parent.selectedItem.toString()
+
+                        if (cancelReason.equals("Others",true)){
+                            tilCancelLay.visibility = View.VISIBLE
+                            tilFollowupLay.visibility = View.GONE
+                        }else if (cancelReason.equals("Followup",true)){
+                            tilDateLay.visibility = View.VISIBLE
+                            tilFollowupLay.visibility = View.VISIBLE
+                            tilCancelLay.visibility = View.GONE
+                        }else {
+                            tilCancelLay.visibility = View.GONE
+                            tilDateLay.visibility = View.GONE
+                            tilFollowupLay.visibility = View.GONE
+                        }
+
+                    } else {
+                        cancelReason = ""
+                    }
+
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // write code to perform some action
+                }
+            }
+
+            btnSubmit.setOnClickListener {
+
+                if (id.toString().isNotEmpty()) {
+
+                    if (spinner.selectedItemPosition > 0) {
+
+                        if (cancelReason.equals("Others", true)) {
+
+                            if (edtReason.text.toString().trim().isEmpty()) {
+                                shortToast("Enter Reason")
+                            }else {
+                                callCancelApi(
+                                    cancelReason,
+                                    edtReason.text.toString(),
+                                    "",
+                                    id.toString(),""
+                                )
+                            }
+
+                        } else if (cancelReason.equals("Followup", true)) {
+
+                            if (edtDate.text.toString().trim().isEmpty()) {
+                                shortToast("Select date")
+                            }else if (edtFollowup.text.toString().trim().isEmpty()){
+                                shortToast("Enter Follow up Remarks")
+                            }else {
+                                callCancelApi(
+                                    cancelReason,
+                                    "",
+                                    edtDate.text.toString(),
+                                    id.toString(),edtFollowup.text.toString().trim()
+                                )
+                            }
+                        } else {
+                            callCancelApi(cancelReason, "", "", id.toString(),"")
+                        }
+
+                    } else {
+                        shortToast("please select cancel reason")
+                    }
+                }
+
+            }
+
+            imgClose.setOnClickListener {
+                closeDialog()
+            }
+
+            //edtDate.setOnClickListener { callDatePicker(edtDate) }
+
+            dialog.show()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun callCancelApi(cancelReason: String, reason: String, date: String,indentId:String
+                              ,fReason:String) {
+        progressDialog = AppUtils.showProgressDialog(requireActivity())
+        viewModel.callCancelTrip(indentId,userId!!,cancelReason,reason,date,role,fReason)
+    }
+
+    private fun closeDialog() {
+        try {
+            if (this::dialog.isInitialized) {
+                dialog.dismiss()
+                dialog.cancel()
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
 }

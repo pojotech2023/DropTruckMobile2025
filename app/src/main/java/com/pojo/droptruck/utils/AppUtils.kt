@@ -29,12 +29,12 @@ object AppUtils {
 
     const val PREFERENCE_NAME="NSKTRADERS"
     //UAT...
-    /*const val BASE_URL= "https://indiatruck.in/api/api/";
-    const val IMAGE_BASE_URL= "https://indiatruck.in/";*/
+    const val BASE_URL= "https://indiatruck.in/api/api/";
+    const val IMAGE_BASE_URL= "https://indiatruck.in/";
 
     //Production...
-    const val BASE_URL= "https://droptruck.in/api/api/"
-    const val IMAGE_BASE_URL= "https://droptruck.in/"
+    /*const val BASE_URL= "https://droptruck.in/api/api/"
+    const val IMAGE_BASE_URL= "https://droptruck.in/"*/
 
     //Development...
     /*const val BASE_URL= "https://hiretruck.in/api/api/";

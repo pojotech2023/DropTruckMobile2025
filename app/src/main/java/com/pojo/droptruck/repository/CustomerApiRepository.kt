@@ -8,6 +8,7 @@ import com.pojo.droptruck.activity.indents.UpdateResult
 import com.pojo.droptruck.dashboard.EnqCount
 import com.pojo.droptruck.pojo.BaseResponse
 import com.pojo.droptruck.pojo.Enquiry
+import com.pojo.droptruck.pojo.TypesPojo
 import com.pojo.droptruck.user.model.ProfileUpdate
 import com.pojo.droptruck.user.model.UserCreateIndent
 import com.pojo.droptruck.utils.Resource
@@ -138,6 +139,21 @@ class CustomerApiRepository @Inject constructor(val api: APIInterface) {
             }
 
         })
+    }
+
+    fun callSpinnerData(url: String): TypesPojo? {
+
+        val res = api.spinnerAPICall(url).execute()
+
+        if (res.isSuccessful) {
+            return res.body()
+        }else {
+            val errorBody = res.errorBody()?.string().toString()
+            val error = Gson().fromJson(errorBody, TypesPojo::class.java)
+
+            return error
+        }
+
     }
 
 

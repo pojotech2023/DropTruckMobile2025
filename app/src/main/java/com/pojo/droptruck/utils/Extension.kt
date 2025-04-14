@@ -65,12 +65,6 @@ fun Activity.callNewMainActivity() {
     finish()
 }
 
-
-fun Activity.callCreateIndent() {
-    val intent = Intent(this, IndentActivity::class.java)
-    startActivity(intent)
-}
-
 fun Fragment.callViewEnquiry(data: Indents) {
     val intent = Intent(requireActivity(), EnquiryViewActivity::class.java)
     intent.putExtra("data",data)

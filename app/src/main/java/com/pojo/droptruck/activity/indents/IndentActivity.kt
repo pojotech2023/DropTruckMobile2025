@@ -9,8 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.activity.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
@@ -25,6 +25,7 @@ import com.pojo.droptruck.R
 import com.pojo.droptruck.databinding.ActivityIndentsBinding
 import com.pojo.droptruck.datastore.base.BaseActivity
 import com.pojo.droptruck.pojo.Indents
+import com.pojo.droptruck.pojo.SpinnerData
 import com.pojo.droptruck.pojo.TypesPojo
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
@@ -33,6 +34,7 @@ import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.shortToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Arrays
 import java.util.Locale
@@ -67,6 +69,9 @@ class IndentActivity : BaseActivity() {
     var pickUpCity = ""
     var dropCity = ""
 
+    lateinit var mTruckAdapter: ArrayAdapter<SpinnerData>
+    lateinit var mMaterialAdapter: ArrayAdapter<SpinnerData>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,9 +85,6 @@ class IndentActivity : BaseActivity() {
         /*lifecycleScope.launch(Dispatchers.IO) {
             mViewModel.getSpinnerData(this@IndentActivity)
         }*/
-
-        //for notification release only...
-        //mViewModel.getSpinnerData(this@IndentActivity)
 
         try {
             if (intent!=null) {
@@ -138,6 +140,10 @@ class IndentActivity : BaseActivity() {
         }catch (e:Exception){
             e.printStackTrace()
         }
+
+        //for notification release only...
+        showProgressDialog()
+        mViewModel.getSpinnerData(this@IndentActivity)
 
         try{
 
@@ -276,9 +282,18 @@ class IndentActivity : BaseActivity() {
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View, position: Int, id: Long) {
-                Log.d("Item: ", "selected item " + parent.selectedItem + " " + position)
-                //var pos = position +1
-                truckType = position.toString()
+                Log.d("Item: ", "selected item " + parent.selectedItem + " " + position + " " + id)
+
+                //truckType = position.toString() //old...
+                try{
+                    val selectedObject = mBinding.truckTypeSpinner.selectedItem as SpinnerData
+                    truckType = selectedObject.id.toString() //new...
+                }catch (e:Exception){
+                    truckType = position.toString() //old...
+                    e.printStackTrace()
+                }
+
+                Log.d("Item: ", "selected item truckType" + truckType)
 
                 if (position>0 && !parent.selectedItem.toString().equals("Others",true)) {
                     newTruckType = ""
@@ -302,6 +317,7 @@ class IndentActivity : BaseActivity() {
                                         view: View, position: Int, id: Long) {
                 Log.d("Item: ", "selected item " + parent.selectedItem + " " + position)
                 bodyType = parent.selectedItem.toString()
+                Log.d("Item: ", "selected item bodyType" + bodyType)
 
                 if (position>0 && !parent.selectedItem.toString().equals("Others",true)) {
                     newBodyType = ""
@@ -337,9 +353,17 @@ class IndentActivity : BaseActivity() {
                                         view: View, position: Int, id: Long) {
                 try{
                     Log.d("materialTypeSpinner: ", "selected item " + parent.selectedItem + " " + position)
-                    var pos = position +1
 
-                    matType = position.toString()
+                    //matType = position.toString() //old...
+                    try{
+                        val selectedObject = mBinding.materialTypeSpinner.selectedItem as SpinnerData
+                        matType = selectedObject.id.toString() //new...
+                    }catch (e:Exception){
+                        matType = position.toString() //old...
+                        e.printStackTrace()
+                    }
+
+                    Log.d("materialTypeSpinner: ", "selected item matType" + matType)
 
                     if (position>0 && !parent.selectedItem.toString().equals("Others",true)) {
                         newMatType = ""
@@ -580,21 +604,92 @@ class IndentActivity : BaseActivity() {
         materialTypes: TypesPojo?,
     ) {
 
-        if (bodyTypes!=null && bodyTypes.status == 200) {
+        dismissProgressDialog()
+
+        val bodyTypeList = mutableListOf<String>()
+        val truckTypesList = ArrayList<SpinnerData>()
+        val materialTypesList = ArrayList<SpinnerData>()
+
+        lifecycleScope.launch(Dispatchers.Default) {
+
+            if (bodyTypes?.data != null && bodyTypes.status == 200) {
+
+                //try{
+
+                bodyTypeList.add("Select body type")
+
+                for (body in bodyTypes.data) {
+                    bodyTypeList.add(body.name.toString())
+                }
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val adapter = ArrayAdapter<String>(this@IndentActivity, android.R.layout.simple_spinner_item, bodyTypeList)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    mBinding.bodyTypeSpinner.adapter = adapter
+                }
+
+                /* }catch (e:Exception){
+                     e.printStackTrace()
+                 }*/
+
+            }
+
+            if (truckTypes?.data!=null && truckTypes.status == 200) {
+
+                try{
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select truck type"
+
+                    truckTypesList.add(selectType)
+                    truckTypesList.addAll(truckTypes.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        mTruckAdapter = ArrayAdapter(this@IndentActivity, android.R.layout.simple_spinner_item, truckTypesList)
+                        mTruckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.truckTypeSpinner.adapter = mTruckAdapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+
+            if (materialTypes?.data!=null && materialTypes.status == 200) {
+
+                try{
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select material type"
+
+                    materialTypesList.add(selectType)
+                    materialTypesList.addAll(materialTypes.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        mMaterialAdapter = ArrayAdapter(this@IndentActivity, android.R.layout.simple_spinner_item, materialTypesList)
+                        mMaterialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.materialTypeSpinner.adapter = mMaterialAdapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+            Log.d("TAG_INDENT_ACT", "res: ")
+            delay(500)
+            Log.d("TAG_INDENT_ACT", "after delay: ")
+            if (::data.isInitialized) {
+                lifecycleScope.launch(Dispatchers.Main) {
+
+                    setSpinnerData()
+                }
+            }
 
         }
-
-        if (truckTypes!=null && truckTypes.status == 200) {
-
-        }
-
-        if (materialTypes!=null && materialTypes.status == 200) {
-
-        }
-
-        /*Log.d("SPINNERDATA::: bodyTypesLiveData", Gson().toJson(bodyTypes))
-        Log.d("SPINNERDATA::: truckTypesLiveData", Gson().toJson(truckTypes))
-        Log.d("SPINNERDATA::: materialTypesLiveData", Gson().toJson(materialTypes))*/
 
     }
 
@@ -626,7 +721,7 @@ class IndentActivity : BaseActivity() {
     }
 
     private fun setSpinnerData() {
-
+        Log.d("TAG_INDENT_ACT", "setSpinnerData: ")
         try {
             mBinding.payTermsLay.visibility = View.GONE
         }catch (e:Exception){
@@ -638,8 +733,11 @@ class IndentActivity : BaseActivity() {
             mBinding.sourceLeadSpinner.setSelection((mBinding.sourceLeadSpinner.getAdapter() as ArrayAdapter<String>)
                 .getPosition(data.sourceOfLead.toString()))
 
-            mBinding.truckTypeSpinner.setSelection((mBinding.truckTypeSpinner.getAdapter() as ArrayAdapter<String>)
-                .getPosition(data.truckTypeName.toString()))
+            setSelectedItem(mBinding.truckTypeSpinner,mTruckAdapter,data.truckTypeName)
+            setSelectedItem(mBinding.materialTypeSpinner,mMaterialAdapter,data.materialTypeName)
+
+            /*mBinding.truckTypeSpinner.setSelection((mBinding.truckTypeSpinner.getAdapter() as ArrayAdapter<String>)
+                .getPosition(data.truckTypeName.toString()))*/
 
             mBinding.bodyTypeSpinner.setSelection((mBinding.bodyTypeSpinner.getAdapter() as ArrayAdapter<String>)
                 .getPosition(data.bodyType.toString()))
@@ -647,10 +745,7 @@ class IndentActivity : BaseActivity() {
             mBinding.weightSpinner.setSelection((mBinding.weightSpinner.getAdapter() as ArrayAdapter<String>)
                 .getPosition(data.weightUnit.toString()))
 
-            /*mBinding.materialTypeSpinner.setSelection((mBinding.materialTypeSpinner.getAdapter() as ArrayAdapter<String>)
-                .getPosition(data.materialTypeId.toString()))*/
-
-            try{
+            /*try{
 
                 val count = mBinding.materialTypeSpinner.adapter?.count
 
@@ -666,7 +761,7 @@ class IndentActivity : BaseActivity() {
 
             }catch (e:Exception){
                 e.printStackTrace()
-            }
+            }*/
 
            /* mBinding.paymentSpinner.setSelection((mBinding.paymentSpinner.getAdapter() as ArrayAdapter<String>)
                 .getPosition(data.paymentTerms.toString()))*/
@@ -739,6 +834,19 @@ class IndentActivity : BaseActivity() {
 
         override fun afterTextChanged(s: Editable) {
 
+        }
+    }
+
+    fun setSelectedItem(spinner: Spinner, adapter: ArrayAdapter<SpinnerData>, value: String?) {
+        try{
+            for (i in 0 until adapter.count) {
+                if (adapter.getItem(i).toString().equals(value)) {
+                    spinner.setSelection(i)
+                    break
+                }
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
         }
     }
 
