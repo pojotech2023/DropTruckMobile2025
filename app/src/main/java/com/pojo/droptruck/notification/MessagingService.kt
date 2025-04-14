@@ -35,16 +35,26 @@ class MessagingService : FirebaseMessagingService() {
 
                 if (sound.isNullOrEmpty()) {
                     Log.d(TAG, "onMessageReceived: empty sound")
-                    sendNotification(message.data["body"], message.data["title"],"notification_sound.mp3")
+                    sendNotification(message.data["body"], message.data["title"],
+                        "notification_sound.mp3",message.data["imageUrl"])
                 }else {
                     Log.d(TAG, "onMessageReceived: sound")
-                    sendNotification(message.data["body"], message.data["title"], "$sound.mp3")
+                    sendNotification(message.data["body"], message.data["title"],
+                        "$sound.mp3",message.data["imageUrl"])
 
                 }
             } else if (message.notification != null) {
                 Log.d(TAG, "onMessageReceived: notify")
+
+                var imgUrl = ""
+
+                message.notification!!.imageUrl?.let {
+                    imgUrl = it.toString()
+                }
+
                 sendNotification(
-                    message.notification!!.body, message.notification!!.title,"notification_sound.mp3")
+                    message.notification!!.body, message.notification!!.title,
+                    "notification_sound.mp3",imgUrl)
             }else {
                 Log.d("Notification:::","Null")
             }
@@ -58,7 +68,8 @@ class MessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
     }
 
-    private fun sendNotification(messageBody: String?, title: String?,soundFile: String) {
+    private fun sendNotification(messageBody: String?, title: String?,
+                                 soundFile: String,imgUrl: String?) {
 
         try{
 
@@ -71,13 +82,13 @@ class MessagingService : FirebaseMessagingService() {
             )
             var bmp: Bitmap? = null
 
-            /*try {
+            try {
                 Log.d(TAG, "sendNotification: " + imgUrl.toString())
                 val `in` = URL(imgUrl.toString()).openStream()
                 bmp = BitmapFactory.decodeStream(`in`)
             } catch (e: IOException) {
                 e.printStackTrace()
-            }*/
+            }
 
             val channelId = "DT_APP" //getString(R.string.app_name)
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -93,7 +104,7 @@ class MessagingService : FirebaseMessagingService() {
                     .setAutoCancel(true)
                     .setSound(sound)
                     .setContentIntent(pendingIntent)
-                    //.setStyle(NotificationCompat.BigPictureStyle().bigPicture(bmp ?: BitmapFactory.decodeResource(resources,R.drawable.delivery_tracking)))
+                    .setStyle(NotificationCompat.BigPictureStyle().bigPicture(bmp ?: BitmapFactory.decodeResource(resources,R.drawable.delivery_tracking)))
                     .setPriority(Notification.PRIORITY_HIGH)
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
