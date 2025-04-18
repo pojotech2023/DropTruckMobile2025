@@ -350,8 +350,8 @@
                     android:id="@+id/truckTypeSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_36sdp"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/TruckType"/>
+                    android:spinnerMode="dropdown"/>
+                    <!--android:entries="@array/TruckType"/>-->
 
             </RelativeLayout>
 
@@ -390,8 +390,8 @@
                     android:id="@+id/bodyTypeSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_36sdp"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/BodyType"/>
+                    android:spinnerMode="dropdown"/>
+                    <!--android:entries="@array/BodyType"/>-->
 
             </RelativeLayout>
 
@@ -491,8 +491,8 @@
                     android:id="@+id/materialTypeSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_36sdp"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/MaterialType"/>
+                    android:spinnerMode="dropdown"/>
+                    <!--android:entries="@array/MaterialType"/>-->
 
             </RelativeLayout>
 

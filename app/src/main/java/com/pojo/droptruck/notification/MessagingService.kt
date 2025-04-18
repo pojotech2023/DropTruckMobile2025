@@ -90,12 +90,12 @@ class MessagingService : FirebaseMessagingService() {
                 e.printStackTrace()
             }
 
-            val channelId = "DT_APP" //getString(R.string.app_name)
+            val channelId = "DT_NOTIFICATION" //getString(R.string.app_name)
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val sound =
                 //Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/notification_sound.mp3")
-                //Uri.parse("android.resource://" + packageName + "/" + R.raw.notification_sound)
-                Uri.parse("android.resource://${packageName}/R.raw.${soundFile}")
+                Uri.parse("android.resource://" + packageName + "/" + R.raw.notification_sound)
+                //Uri.parse("android.resource://${packageName}/R.raw.${soundFile}")
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(this, channelId)
                     .setSmallIcon(R.drawable.delivery_tracking)
