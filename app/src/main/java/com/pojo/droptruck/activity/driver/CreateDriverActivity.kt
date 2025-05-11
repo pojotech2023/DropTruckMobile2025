@@ -14,8 +14,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -29,12 +31,15 @@ import com.pojo.droptruck.R
 import com.pojo.droptruck.databinding.ActivityCreateDriverBinding
 import com.pojo.droptruck.datastore.base.BaseActivity
 import com.pojo.droptruck.pojo.Driver
+import com.pojo.droptruck.pojo.SpinnerData
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.utils.AppConstant
 import com.pojo.droptruck.utils.AppUtils
 import com.pojo.droptruck.utils.Status
 import com.pojo.droptruck.utils.shortToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -71,6 +76,8 @@ class CreateDriverActivity : BaseActivity() {
     var dlPhoto : MultipartBody.Part? = null
     var insPhoto: MultipartBody.Part? = null
 
+    val truckTypesList = ArrayList<SpinnerData>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityCreateDriverBinding.inflate(layoutInflater)
@@ -80,6 +87,8 @@ class CreateDriverActivity : BaseActivity() {
         role = prefs.getValueString(AppConstant.ROLE_ID).toString()
 
         mBinding.imgBack.setOnClickListener { finish() }
+
+        mViewModel.getSpinnerData()
 
         try {
             if (intent!=null) {
@@ -258,6 +267,52 @@ class CreateDriverActivity : BaseActivity() {
 
         }
 
+        mViewModel.bodyTypeData.observe(this,Observer{
+
+            if (it?.data!=null && it.status == 200) {
+                val bodyTypeList = mutableListOf<String>()
+
+                bodyTypeList.add("Select body type")
+
+                for (body in it.data) {
+                    bodyTypeList.add(body.name.toString())
+                }
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val adapter = ArrayAdapter<String>(this@CreateDriverActivity, android.R.layout.simple_spinner_item, bodyTypeList)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    mBinding.bodyTypeSpinner.adapter = adapter
+                }
+            }
+
+        })
+
+        mViewModel.truckTypeData.observe(this,Observer {
+            if (it?.data!=null && it.status == 200){
+                //val truckTypesList = ArrayList<SpinnerData>()
+
+                try{
+                    truckTypesList.clear()
+
+                    val selectType = SpinnerData()
+                    selectType.id = 0
+                    selectType.name = "Select truck type"
+
+                    truckTypesList.add(selectType)
+                    truckTypesList.addAll(it.data)
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter(this@CreateDriverActivity, android.R.layout.simple_spinner_item, truckTypesList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        mBinding.truckTypeSpinner.adapter = adapter
+                    }
+
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
+        })
+
     }
 
     private fun setDriverDetails(driver: Driver?) {
@@ -286,7 +341,8 @@ class CreateDriverActivity : BaseActivity() {
                         .getPosition(vDtl.supplierType.toString()))*/
 
                     it.truckType?.let { pos ->
-                        mBinding.truckTypeSpinner.setSelection(pos.toInt())
+                        //mBinding.truckTypeSpinner.setSelection(pos.toInt())
+                        setSelectedItem(mBinding.truckTypeSpinner,pos.toInt())
                     }
                     mBinding.bodyTypeSpinner.setSelection((mBinding.bodyTypeSpinner.getAdapter() as ArrayAdapter<String>)
                         .getPosition(it.vehicleType.toString()))
@@ -418,5 +474,21 @@ class CreateDriverActivity : BaseActivity() {
         return MultipartBody.Part.createFormData(name, name, fileBody)
 
     }
+
+    fun setSelectedItem(spinner: Spinner, value: Int) {
+        try{
+            if (truckTypesList.size>0) {
+                for (i in 0 until truckTypesList.size) {
+                    if (truckTypesList[i].id == value) {
+                        spinner.setSelection(i)
+                        break
+                    }
+                }
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
+
 
 }

@@ -184,7 +184,7 @@
                         android:id="@+id/et_weight"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/weight"
                         android:paddingStart="4dp"
                         android:textSize="14sp"

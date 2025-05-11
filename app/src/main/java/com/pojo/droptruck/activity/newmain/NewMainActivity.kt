@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,18 +27,21 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.pojo.droptruck.BuildConfig
 import com.pojo.droptruck.R
+import com.pojo.droptruck.pojo.FollowUpData
 import com.pojo.droptruck.prefs
 import com.pojo.droptruck.signin.SignInViewModel
 import com.pojo.droptruck.utils.AppConstant
 import com.pojo.droptruck.utils.LoginActivity
 import com.pojo.droptruck.utils.Status
-import com.pojo.droptruck.utils.callCustomerActivity
 import com.pojo.droptruck.utils.callCustomerCreateIndent
-import com.pojo.droptruck.utils.callNewMainActivity
-import com.pojo.droptruck.utils.shortToast
+import com.pojo.droptruck.utils.longToast
 import com.pojo.droptruck.utils.showAppUpdateDialog
-import com.pojo.droptruck.utils.showCurrencyDialog
+import com.pojo.droptruck.utils.showFollowUpDialog
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 
@@ -54,6 +58,7 @@ class NewMainActivity : AppCompatActivity() {
 
     val mViewModel: SignInViewModel by viewModels()
     lateinit var dialog: Dialog
+    lateinit var followUpDialog: Dialog
     var myTimer: Timer?=null
     var userId:String = ""
     lateinit var iActDialog: Dialog
@@ -76,6 +81,8 @@ class NewMainActivity : AppCompatActivity() {
         userId = prefs.getValueString(AppConstant.USER_ID).toString()
         role = prefs.getValueString(AppConstant.ROLE_ID).toString()
 
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
         if (role.equals(AppConstant.CUSTOMER)) {
             bottomNavigationView!!.menu.getItem(1).isVisible = false
             bottomNavigationView!!.menu.getItem(0).icon = resources.getDrawable(R.drawable.enqiry_trip)
@@ -92,6 +99,12 @@ class NewMainActivity : AppCompatActivity() {
             fab!!.visibility = View.GONE
             bottomNavigationView!!.menu.getItem(3).isVisible = false
             graph!!.setStartDestination(R.id.dashboardFragment)
+
+            if (prefs.getValueString(AppConstant.CURRENT_DATE).isNullOrEmpty() ||
+                !prefs.getValueString(AppConstant.CURRENT_DATE).equals(currentDate)) {
+                mViewModel.checkFollowUp(userId)
+            }
+
         }
 
         //graph!!.setStartDestination(R.id.dashboardFragment)
@@ -151,6 +164,25 @@ class NewMainActivity : AppCompatActivity() {
         })
 
         askPermissions()
+
+        mViewModel.followUpLiveData.observe(this,Observer {
+            if (it!=null){
+                when(it.status){
+                    Status.SUCCESS -> {
+
+                        if (it.data?.status == 200) {
+                            callFollowUpDialog(it.data.data)
+                            prefs.save(AppConstant.CURRENT_DATE,currentDate)
+                        }
+
+                    }
+                    Status.ERROR -> {
+
+                    }
+                }
+            }
+        })
+
 
     }
 
@@ -308,6 +340,29 @@ class NewMainActivity : AppCompatActivity() {
                 }
             )
             .check()
+
+    }
+
+    private fun callFollowUpDialog(data: FollowUpData?) {
+
+        try {
+            followUpDialog = showFollowUpDialog(R.layout.dialog_followup)
+
+            val btnOk: TextView = followUpDialog.findViewById(R.id.btn_ok)
+            val today: TextView = followUpDialog.findViewById(R.id.today_count)
+            val tomorrow: TextView = followUpDialog.findViewById(R.id.tomorrow_count)
+
+            btnOk.setOnClickListener {
+                followUpDialog.dismiss()
+            }
+
+            today.text = data?.today.toString()
+            tomorrow.text = data?.tomorrow.toString()
+
+            followUpDialog.show()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
 
     }
 

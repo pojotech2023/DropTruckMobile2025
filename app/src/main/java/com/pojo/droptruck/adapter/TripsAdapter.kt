@@ -183,7 +183,7 @@ class TripsAdapter(val context : Context, val mStatus: String, var enquryList: A
                         val weight = mBinding.valWeight.text
 
                         try {
-                            materialType = if (this.materialTypeName.equals("Others")) {
+                            materialType = if (this.materialTypeName.equals("Others",true)) {
                                 this.newMaterialType.toString()
                             }else {
                                 this.materialTypeName.toString()

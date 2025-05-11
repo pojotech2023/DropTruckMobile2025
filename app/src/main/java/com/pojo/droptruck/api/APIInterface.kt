@@ -12,6 +12,8 @@ import com.pojo.droptruck.pojo.CustomerLogin
 import com.pojo.droptruck.pojo.CustomerRegistration
 import com.pojo.droptruck.pojo.DriverDetails
 import com.pojo.droptruck.pojo.Enquiry
+import com.pojo.droptruck.pojo.FollowUpData
+import com.pojo.droptruck.pojo.FollowUpRes
 import com.pojo.droptruck.pojo.GetCustomerDetails
 import com.pojo.droptruck.pojo.GetDriverDetails
 import com.pojo.droptruck.pojo.GetSupplierDetails
@@ -35,6 +37,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Url
 
 
@@ -284,5 +287,8 @@ interface APIInterface {
     @FormUrlEncoded
     @POST("clone-indents")
     fun cloneIndent(@Field("indent_id") userId: String): Call<UpdateResult>
+
+    @GET("sales/followup-count") //sales/followup-count?user_id=3
+    fun followUpCount(@Query("user_id") userId:String): Call<FollowUpRes>
 
 }

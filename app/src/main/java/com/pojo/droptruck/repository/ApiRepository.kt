@@ -11,6 +11,8 @@ import com.pojo.droptruck.pojo.BaseResponse
 import com.pojo.droptruck.pojo.ConfirmIndent
 import com.pojo.droptruck.pojo.CustomerLogin
 import com.pojo.droptruck.pojo.CustomerRegistration
+import com.pojo.droptruck.pojo.FollowUpData
+import com.pojo.droptruck.pojo.FollowUpRes
 import com.pojo.droptruck.pojo.GetCustomerDetails
 import com.pojo.droptruck.pojo.GetDriverDetails
 import com.pojo.droptruck.pojo.GetSupplierDetails
@@ -768,7 +770,17 @@ class ApiRepository @Inject constructor(val api: APIInterface) {
             */}
 
         }
+
+    fun getFollowUpCount(userId: String, followUpLiveData: MutableLiveData<Resource<FollowUpRes>>) {
+
+        val res = api.followUpCount(userId).execute()
+
+        if (res.isSuccessful) {
+            followUpLiveData.postValue(Resource.success(res.body()))
+        }
+
     }
+}
 
 
 //}

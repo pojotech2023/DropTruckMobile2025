@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pojo.droptruck.datastore.DataStorage
 import com.pojo.droptruck.pojo.CustomerLogin
+import com.pojo.droptruck.pojo.FollowUpData
+import com.pojo.droptruck.pojo.FollowUpRes
 import com.pojo.droptruck.pojo.Login
 import com.pojo.droptruck.pojo.LoginResults
 import com.pojo.droptruck.pojo.VersionResults
@@ -28,6 +30,7 @@ class SignInViewModel  @Inject constructor(val repo: ApiRepository, var dataStor
     val customerLoginLiveData = MutableLiveData<Resource<CustomerLogin>>()
     val versionLiveData = MutableLiveData<Resource<VersionResults>>()
     val checkStatusLiveData = MutableLiveData<Resource<LoginResults>>()
+    val followUpLiveData = MutableLiveData<Resource<FollowUpRes>>()
 
     fun callLogin(){
 
@@ -84,6 +87,12 @@ class SignInViewModel  @Inject constructor(val repo: ApiRepository, var dataStor
         viewModelScope.launch(Dispatchers.IO) {
             val url = AppUtils.BASE_URL+"get-device-token"
             repo.updateFCMToken(url,userId,role,fcm)
+        }
+    }
+
+    fun checkFollowUp(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getFollowUpCount(userId,followUpLiveData)
         }
     }
 

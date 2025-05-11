@@ -141,7 +141,6 @@ class IndentActivity : BaseActivity() {
             e.printStackTrace()
         }
 
-        //for notification release only...
         showProgressDialog()
         mViewModel.getSpinnerData(this@IndentActivity)
 

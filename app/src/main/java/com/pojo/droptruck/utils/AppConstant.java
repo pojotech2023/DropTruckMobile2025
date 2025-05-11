@@ -122,4 +122,10 @@ public class AppConstant {
     public static final String TRUCK_TYPES = "truck-types";
     public static final String CLONE_INDENT = "CLONE_INDENT";
 
+
+    public static final String CURRENT_DATE = "CURRENT_DATE";
+    //public static final String CLONE_INDENT = "CLONE_INDENT";
+
+
+
 }

@@ -157,8 +157,8 @@
                         android:id="@+id/truckTypeSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_36sdp"
-                        android:spinnerMode="dropdown"
-                        android:entries="@array/TruckType"/>
+                        android:spinnerMode="dropdown"/>
+                        <!--android:entries="@array/TruckType"/>-->
 
                 </RelativeLayout>
 
@@ -179,8 +179,8 @@
                         android:id="@+id/bodyTypeSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_36sdp"
-                        android:spinnerMode="dropdown"
-                        android:entries="@array/CDBodyType"/>
+                        android:spinnerMode="dropdown"/>
+                        <!--android:entries="@array/CDBodyType"/>-->
 
                 </RelativeLayout>
 

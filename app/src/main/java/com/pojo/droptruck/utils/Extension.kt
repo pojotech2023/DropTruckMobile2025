@@ -152,9 +152,13 @@ fun Activity.callCustomerCreateIndent() {
 
 //fun Fragment.callViewTripsDetails(data: Indents,role: String,userId: String) {
 fun Fragment.callViewTripsDetails(data: Indents) {
-    val intent = Intent(requireActivity(), TripsViewActivity::class.java)
-    intent.putExtra("data",data)
-    startActivity(intent)
+    try{
+        val intent = Intent(requireActivity(), TripsViewActivity::class.java)
+        intent.putExtra("data",data)
+        startActivity(intent)
+    }catch (e:Exception){
+        e.printStackTrace()
+    }
 }
 
 fun Fragment.callViewTripsDetails(data: Indents,status: String) {
@@ -269,6 +273,18 @@ fun Fragment.showImgDialog(dialogLayout: Int): Dialog {
     val height = (resources.displayMetrics.heightPixels * 1).toInt()
     //mDialog.window?.setLayout(width, height)
     mDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+
+    return mDialog
+}
+
+fun Activity.showFollowUpDialog(dialogLayout: Int): Dialog {
+
+    val mDialog = Dialog(this)
+    mDialog.setContentView(dialogLayout)
+    mDialog.setCanceledOnTouchOutside(true)
+
+    val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+    mDialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
 
     return mDialog
 }
